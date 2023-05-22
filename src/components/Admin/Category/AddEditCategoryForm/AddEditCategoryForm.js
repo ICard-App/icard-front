@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { Form, Image, Button } from "semantic-ui-react";
-import { useDropzone } from "react-dropzone";
 import { useFormik } from "formik";
+import { useDropzone } from "react-dropzone";
 import * as Yup from "yup";
 import { useCategory } from "../../../../hooks";
 import "./AddEditCategoryForm.scss";

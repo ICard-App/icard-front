@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Loader } from "semantic-ui-react";
 import {
   HeaderPage,
+  TableCategoryAdmin,
+  AddEditCategoryForm,
 } from "../../components/Admin";
 import { ModalBasic } from "../../components/Common";
 import { useCategory } from "../../hooks";
@@ -26,32 +28,51 @@ export function CategoriesAdmin() {
     openCloseModal();
   };
 
+  const updateCategory = (data) => {
+    setTitleModal("Actualizar categoria");
+    setContentModal(
+      <AddEditCategoryForm
+        onClose={openCloseModal}
+        onRefetch={onRefetch}
+        category={data}
+      />
+    );
+    openCloseModal();
+  };
+
+  const onDeleteCategory = async (data) => {
+    const result = window.confirm(`¿Eliminar categoría ${data.title}?`);
+    if (result) {
+      await deleteCategory(data.id);
+      onRefetch();
+    }
+  };
 
   return (
     <>
-    <HeaderPage
-      title="Categorias"
-      btnTitle="Nueva categoria"
-      btnClick={addCategory}
-    />
-    {loading ? (
-      <Loader active inline="centered">
-        Cargando...
-      </Loader>
-    ) : (
-      <TableCategoryAdmin
-        categories={categories}
-        updateCategory={updateCategory}
-        deleteCategory={onDeleteCategory}
+      <HeaderPage
+        title="Categorias"
+        btnTitle="Nueva categoria"
+        btnClick={addCategory}
       />
-    )}
+      {loading ? (
+        <Loader active inline="centered">
+          Cargando...
+        </Loader>
+      ) : (
+        <TableCategoryAdmin
+          categories={categories}
+          updateCategory={updateCategory}
+          deleteCategory={onDeleteCategory}
+        />
+      )}
 
-    <ModalBasic
-      show={showModal}
-      onClose={openCloseModal}
-      title={titleModal}
-      children={contentModal}
-    />
+      <ModalBasic
+        show={showModal}
+        onClose={openCloseModal}
+        title={titleModal}
+        children={contentModal}
+      />
     </>
   );
 }
