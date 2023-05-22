@@ -17,7 +17,14 @@ const routesAdmin = [
         layout: AdminLayout,
         component: CategoriesAdmin,
         exact: true,
-      }
+      },
+      {
+        path: "/admin/products",
+        layout: AdminLayout,
+        component: ProductAdmin,
+        exact: true,
+      },
+
 ];
 
 export default routesAdmin;
