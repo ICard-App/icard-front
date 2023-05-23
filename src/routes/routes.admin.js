@@ -2,6 +2,7 @@ import { AdminLayout } from '../layouts'
 import { LoginAdmin } from '../pages/Admin'
 import {
     CategoriesAdmin,
+    ProductAdmin,
   } from "../pages/Admin";
 
 
