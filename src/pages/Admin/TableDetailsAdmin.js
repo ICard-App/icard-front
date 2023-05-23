@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Loader } from "semantic-ui-react";
 import { useParams } from "react-router-dom";
-
+import { forEach, size } from "lodash";
 import { HeaderPage, AddOrderForm } from "../../components/Admin";
 import { ModalBasic } from "../../components/Common";
 import {
@@ -41,7 +41,32 @@ export function TableDetailsAdmin() {
       "¿Estas seguro de generar la cuenta de la mesa?"
     );
 
- 
+    if (result) {
+      let totalPayment = 0;
+      forEach(orders, (order) => {
+        totalPayment += Number(order.product_data.price);
+      });
+
+      const resultTypePayment = window.confirm(
+        "¿Pago con tarjeta pusa ACEPTAR con efectivo pusa CANCELAR"
+      );
+
+      const paymentData = {
+        table: id,
+        totalPayment: totalPayment.toFixed(2),
+        paymentType: resultTypePayment ? "CARD" : "CASH",
+        statusPayment: "PENDING",
+      };
+
+      const payment = await createPayment(paymentData);
+
+      for await (const order of orders) {
+        await addPaymentToOrder(order.id, payment.id);
+      }
+      onReloadOrders();
+    }
+  };
+
   return (
     <>
       <HeaderPage
@@ -81,5 +106,4 @@ export function TableDetailsAdmin() {
       </ModalBasic>
     </>
   );
-        }
-      }
+}
