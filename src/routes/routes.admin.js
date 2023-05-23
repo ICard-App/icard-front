@@ -12,7 +12,13 @@ const routesAdmin = [
     {
         path: '/admin',
         layout: AdminLayout,
-        component: LoginAdmin,
+        component: HomeAdmin,
+        exact: true,
+    },
+    {
+        path: '/admin/users',
+        layout: AdminLayout,
+        component: UsersAdmin,
         exact: true,
     }, 
     {
