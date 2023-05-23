@@ -1,12 +1,13 @@
 import React from 'react';
 import { ToastContainer } from 'react-toastify'
 import { Navigation } from './routes';
-// import { AdminLayout, ClientLayout } from './layouts';
+import { AuthProvider } from "./context";
 
 export default function App() {
   return (
-    <div>
+    <AuthProvider>
       <Navigation />
+
       <ToastContainer
         position="bottom-center"
         autoClose={5000}
@@ -17,7 +18,7 @@ export default function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover={false}
-      />    </div>
-
-  )
+      />
+    </AuthProvider>
+  );
 }
