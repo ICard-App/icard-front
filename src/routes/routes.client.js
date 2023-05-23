@@ -27,6 +27,12 @@ const routesClient = [
         exact: true,
       },
       {
+        path: "/client/:tableNumber/orders",
+        layout: ClientLayout,
+        component: OrdersHistory,
+        exact: true,
+      },
+      {
         path: "/client/:tableNumber/:idCategory",
         layout: ClientLayout,
         component: Products,
