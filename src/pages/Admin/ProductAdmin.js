@@ -2,72 +2,69 @@ import React, { useState, useEffect } from "react";
 import { Loader } from "semantic-ui-react";
 import {
   HeaderPage,
-  TableUsers,
-  AddEditUserForm,
+  TableProductAdmin,
+  AddEditProductForm,
 } from "../../components/Admin";
 import { ModalBasic } from "../../components/Common";
-import { useUser } from "../../hooks";
+import { useProduct } from "../../hooks";
 
-export function UsersAdmin() {
+export function ProductAdmin() {
   const [showModal, setShowModal] = useState(false);
   const [titleModal, setTitleModal] = useState(null);
   const [contentModal, setContentModal] = useState(null);
   const [refetch, setRefetch] = useState(false);
-  const { loading, users, getUsers, deleteUser } = useUser();
+  const { loading, products, getProducts, deleteProduct } = useProduct();
 
-  useEffect(() => getUsers(), [refetch]);
+  useEffect(() => getProducts(), [refetch]);
 
   const openCloseModal = () => setShowModal((prev) => !prev);
   const onRefetch = () => setRefetch((prev) => !prev);
 
-  const addUser = () => {
-    setTitleModal("Nuevo usuario");
+  const addProduct = () => {
+    setTitleModal("Nuevo producto");
     setContentModal(
-      <AddEditUserForm onClose={openCloseModal} onRefetch={onRefetch} />
+      <AddEditProductForm onClose={openCloseModal} onRefetch={onRefetch} />
     );
     openCloseModal();
   };
 
-  const updateUser = (data) => {
-    setTitleModal("Actualizar usuario");
+  const updateProduct = (data) => {
+    setTitleModal("Actualizar producto");
     setContentModal(
-      <AddEditUserForm
+      <AddEditProductForm
         onClose={openCloseModal}
         onRefetch={onRefetch}
-        user={data}
+        product={data}
       />
     );
     openCloseModal();
   };
 
-  const onDeleteUser = async (data) => {
-    const result = window.confirm(`¿Eliminar usuario ${data.email}?`);
+  const onDeleteProduct = async (data) => {
+    const result = window.confirm(`¿Eliminar producto ${data.title}?`);
     if (result) {
-      try {
-        await deleteUser(data.id);
-        onRefetch();
-      } catch (error) {
-        console.error(error);
-      }
+      await deleteProduct(data.id);
+      onRefetch();
     }
   };
 
   return (
     <>
       <HeaderPage
-        title="Usuarios"
-        btnTitle="Nuevo usuario"
-        btnClick={addUser}
+        title="Productos"
+        btnTitle="Nuevo producto"
+        btnClick={addProduct}
       />
+
       {loading ? (
         <Loader active inline="centered">
           Cargando...
         </Loader>
       ) : (
-        <TableUsers
-          users={users}
-          updateUser={updateUser}
-          onDeleteUser={onDeleteUser}
+        <TableProductAdmin
+          products={products}
+          updateProduct={updateProduct}
+          deleteProduct={onDeleteProduct}
         />
       )}
 

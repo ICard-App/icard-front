@@ -2,72 +2,68 @@ import React, { useState, useEffect } from "react";
 import { Loader } from "semantic-ui-react";
 import {
   HeaderPage,
-  TableUsers,
-  AddEditUserForm,
+  TableCategoryAdmin,
+  AddEditCategoryForm,
 } from "../../components/Admin";
 import { ModalBasic } from "../../components/Common";
-import { useUser } from "../../hooks";
+import { useCategory } from "../../hooks";
 
-export function UsersAdmin() {
+export function CategoriesAdmin() {
   const [showModal, setShowModal] = useState(false);
   const [titleModal, setTitleModal] = useState(null);
   const [contentModal, setContentModal] = useState(null);
   const [refetch, setRefetch] = useState(false);
-  const { loading, users, getUsers, deleteUser } = useUser();
+  const { loading, categories, getCategories, deleteCategory } = useCategory();
 
-  useEffect(() => getUsers(), [refetch]);
+  useEffect(() => getCategories(), [refetch]);
 
   const openCloseModal = () => setShowModal((prev) => !prev);
   const onRefetch = () => setRefetch((prev) => !prev);
 
-  const addUser = () => {
-    setTitleModal("Nuevo usuario");
+  const addCategory = () => {
+    setTitleModal("Nueva categoria");
     setContentModal(
-      <AddEditUserForm onClose={openCloseModal} onRefetch={onRefetch} />
+      <AddEditCategoryForm onClose={openCloseModal} onRefetch={onRefetch} />
     );
     openCloseModal();
   };
 
-  const updateUser = (data) => {
-    setTitleModal("Actualizar usuario");
+  const updateCategory = (data) => {
+    setTitleModal("Actualizar categoria");
     setContentModal(
-      <AddEditUserForm
+      <AddEditCategoryForm
         onClose={openCloseModal}
         onRefetch={onRefetch}
-        user={data}
+        category={data}
       />
     );
     openCloseModal();
   };
 
-  const onDeleteUser = async (data) => {
-    const result = window.confirm(`¿Eliminar usuario ${data.email}?`);
+  const onDeleteCategory = async (data) => {
+    const result = window.confirm(`¿Eliminar categoría ${data.title}?`);
     if (result) {
-      try {
-        await deleteUser(data.id);
-        onRefetch();
-      } catch (error) {
-        console.error(error);
-      }
+      await deleteCategory(data.id);
+      onRefetch();
     }
   };
 
   return (
     <>
       <HeaderPage
-        title="Usuarios"
-        btnTitle="Nuevo usuario"
-        btnClick={addUser}
+        title="Categorias"
+        btnTitle="Nueva categoria"
+        btnClick={addCategory}
       />
       {loading ? (
         <Loader active inline="centered">
           Cargando...
         </Loader>
       ) : (
-        <TableUsers
-          users={users}
-          updateUser={updateUser}
-          onDeleteUser={onDeleteUser}
+        <TableCategoryAdmin
+          categories={categories}
+          updateCategory={updateCategory}
+          deleteCategory={onDeleteCategory}
         />
       )}
 
