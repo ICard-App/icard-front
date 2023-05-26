@@ -7,7 +7,7 @@ export function LoginAdmin() {
     <div className="login-admin">
       <div className="login-admin__content">
         <h1>Entrar al panel</h1>
-        <LoginForm/>
+        <LoginForm />
       </div>
     </div>
   );
