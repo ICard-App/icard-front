@@ -6,25 +6,28 @@ import "./ClientLayout.scss";
 
 export function ClientLayout(props) {
   const { children } = props;
-  // Obtener el estado y la función para verificar la existencia de la mesa desde el hook useTable
   const { isExistTable } = useTable();
   const { tableNumber } = useParams();
   const history = useHistory();
-  
-  // Función de efecto que se ejecuta cuando cambia el número de mesa
+
   useEffect(() => {
     (async () => {
-      // Verificar la existencia de la mesa asincrónicamente
       const exist = await isExistTable(tableNumber);
-      if (!exist) closeTable(); // Cerrar la mesa si no existe
+      if (!exist) closeTable();
     })();
   }, [tableNumber]);
-  
-// Función para cerrar la mesa y redireccionar a la página principal
+
   const closeTable = () => {
     history.push("/");
   };
 
+  const goToCart = () => {
+    history.push(`/client/${tableNumber}/cart`);
+  };
+
+  const goToOrders = () => {
+    history.push(`/client/${tableNumber}/orders`);
+  };
 
   return (
     <div className="client-layout-bg">
@@ -34,6 +37,18 @@ export function ClientLayout(props) {
             <h1>iCard</h1>
           </Link>
           <span>Mesa {tableNumber}</span>
+
+          <div>
+            <Button icon onClick={goToCart}>
+              <Icon name="shop" />
+            </Button>
+            <Button icon onClick={goToOrders}>
+              <Icon name="list" />
+            </Button>
+            <Button icon onClick={closeTable}>
+              <Icon name="sign-out" />
+            </Button>
+          </div>
         </div>
 
         <div className="client-layout__content">{children}</div>
