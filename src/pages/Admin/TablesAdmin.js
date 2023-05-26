@@ -2,72 +2,69 @@ import React, { useState, useEffect } from "react";
 import { Loader } from "semantic-ui-react";
 import {
   HeaderPage,
-  TableUsers,
-  AddEditUserForm,
+  TableTablesAdmin,
+  AddEditTableForm,
 } from "../../components/Admin";
 import { ModalBasic } from "../../components/Common";
-import { useUser } from "../../hooks";
+import { useTable } from "../../hooks";
 
-export function UsersAdmin() {
+export function TablesAdmin() {
   const [showModal, setShowModal] = useState(false);
   const [titleModal, setTitleModal] = useState(null);
   const [contentModal, setContentModal] = useState(null);
   const [refetch, setRefetch] = useState(false);
-  const { loading, users, getUsers, deleteUser } = useUser();
+  const { loading, tables, getTables, deleteTable } = useTable();
 
-  useEffect(() => getUsers(), [refetch]);
+  useEffect(() => getTables(), [refetch]);
 
   const openCloseModal = () => setShowModal((prev) => !prev);
   const onRefetch = () => setRefetch((prev) => !prev);
 
-  const addUser = () => {
-    setTitleModal("Nuevo usuario");
+  const addTable = () => {
+    setTitleModal("Crear mesa");
     setContentModal(
-      <AddEditUserForm onClose={openCloseModal} onRefetch={onRefetch} />
+      <AddEditTableForm onClose={openCloseModal} onRefetch={onRefetch} />
     );
     openCloseModal();
   };
 
-  const updateUser = (data) => {
-    setTitleModal("Actualizar usuario");
+  const updateTable = (data) => {
+    setTitleModal("Actualizar mesa");
     setContentModal(
-      <AddEditUserForm
+      <AddEditTableForm
         onClose={openCloseModal}
         onRefetch={onRefetch}
-        user={data}
+        table={data}
       />
     );
     openCloseModal();
   };
 
-  const onDeleteUser = async (data) => {
-    const result = window.confirm(`¿Eliminar usuario ${data.email}?`);
+  const onDeleteTable = async (data) => {
+    const result = window.confirm(`¿Eliminar mesa ${data.number}?`);
     if (result) {
-      try {
-        await deleteUser(data.id);
-        onRefetch();
-      } catch (error) {
-        console.error(error);
-      }
+      await deleteTable(data.id);
+      onRefetch();
     }
   };
 
   return (
     <>
       <HeaderPage
-        title="Usuarios"
-        btnTitle="Nuevo usuario"
-        btnClick={addUser}
+        title="Mesas"
+        btnTitle="Crear nueva mesa"
+        btnClick={addTable}
       />
+
       {loading ? (
         <Loader active inline="centered">
           Cargando...
         </Loader>
       ) : (
-        <TableUsers
-          users={users}
-          updateUser={updateUser}
-          onDeleteUser={onDeleteUser}
+        <TableTablesAdmin
+          tables={tables}
+          updateTable={updateTable}
+          deleteTable={onDeleteTable}
         />
       )}
 
